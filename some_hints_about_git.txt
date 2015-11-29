@@ -1,3 +1,5 @@
+COMMITTING FILES IN A GIVEN PATH KEEPING THE FILESYSTEM AS IN LOCAL
+
 When I have a git repository with subdirectories, I can use:
 
 $ git add <file_name>
@@ -9,3 +11,135 @@ Then, after pushing (from the directory where .git is present) with:
 $ git push origin master
 
 I will find that my remote repository has the same filesystem as in my local, that is, a file committed in a directory called "dir" will be found in a directory with the same name in my remote repository.
+
+========================================================================================
+
+REMOVING FILES
+
+Suppose we create a file "fileToRemove.txt", add and commit it, then push to remote so that it is saved in remote repository. Then, suppose you remove it from local:
+
+$ rm file.txt
+
+If you use the git status command, you will see the status of the file after each operation. It is possible to remove it in local and git will keep track ofit being removed. So you might also want to delete it in remote and make so that git doesn't keep track of it any longer. See the following exercise I've been doing to test this:
+
+------ Beginning of exercise ------------------------
+$ emacs fileToRemove.txt
+labcalcolo@labcalcolo-VirtualBox:~/Documents/git_test_dir/mytest
+$ git add fileToRemove.txt 
+labcalcolo@labcalcolo-VirtualBox:~/Documents/git_test_dir/mytest
+$ git status
+On branch master
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+	new file:   fileToRemove.txt
+
+labcalcolo@labcalcolo-VirtualBox:~/Documents/git_test_dir/mytest
+$ git reset fileToRemove.txt
+labcalcolo@labcalcolo-VirtualBox:~/Documents/git_test_dir/mytest
+$ git status
+On branch master
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+	fileToRemove.txt
+
+nothing added to commit but untracked files present (use "git add" to track)
+labcalcolo@labcalcolo-VirtualBox:~/Documents/git_test_dir/mytest
+$ git add fileToRemove.txt 
+labcalcolo@labcalcolo-VirtualBox:~/Documents/git_test_dir/mytest
+$ git status
+On branch master
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+	new file:   fileToRemove.txt
+
+labcalcolo@labcalcolo-VirtualBox:~/Documents/git_test_dir/mytest
+$ git commit -m "file to be removed to test git rm"
+[master 04f13f4] file to be removed to test git rm
+ 1 file changed, 1 insertion(+)
+ create mode 100644 fileToRemove.txt
+labcalcolo@labcalcolo-VirtualBox:~/Documents/git_test_dir/mytest
+$ git status
+On branch master
+nothing to commit, working directory clean
+labcalcolo@labcalcolo-VirtualBox:~/Documents/git_test_dir/mytest
+$ rm fileToRemove.txt 
+labcalcolo@labcalcolo-VirtualBox:~/Documents/git_test_dir/mytest
+$ git status
+On branch master
+Changes not staged for commit:
+  (use "git add/rm <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	deleted:    fileToRemove.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+labcalcolo@labcalcolo-VirtualBox:~/Documents/git_test_dir/mytest
+$ ls
+dir1  dir2  f1mytest.txt  README.md  some_hints_about_git.txt
+labcalcolo@labcalcolo-VirtualBox:~/Documents/git_test_dir/mytest
+$ git push origin master                                                                           --> doing push to see what happened in remote. The file was still there, but not in local.
+Username for 'https://github.com': cippy
+Password for 'https://cippy@github.com': 
+Counting objects: 4, done.
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 320 bytes | 0 bytes/s, done.
+Total 3 (delta 1), reused 0 (delta 0)
+To https://github.com/cippy/mytest.git
+   9307ac6..04f13f4  master -> master
+labcalcolo@labcalcolo-VirtualBox:~/Documents/git_test_dir/mytest
+$ git status
+On branch master
+Changes not staged for commit:
+  (use "git add/rm <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	deleted:    fileToRemove.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+labcalcolo@labcalcolo-VirtualBox:~/Documents/git_test_dir/mytest
+$ git rm fileToRemove.txt 
+rm 'fileToRemove.txt'
+labcalcolo@labcalcolo-VirtualBox:~/Documents/git_test_dir/mytest
+$ git status
+On branch master
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+	deleted:    fileToRemove.txt
+
+labcalcolo@labcalcolo-VirtualBox:~/Documents/git_test_dir/mytest
+$ git push origin master
+Username for 'https://github.com': cippy
+Password for 'https://cippy@github.com': 
+Everything up-to-date
+labcalcolo@labcalcolo-VirtualBox:~/Documents/git_test_dir/mytest
+$ ls
+dir1  dir2  f1mytest.txt  README.md  some_hints_about_git.txt
+labcalcolo@labcalcolo-VirtualBox:~/Documents/git_test_dir/mytest
+$ git commit fileToRemove.txt                                                                --> this line was my mistake (wanted to write "git commit -m "message") :P
+Aborting commit due to empty commit message.
+labcalcolo@labcalcolo-VirtualBox:~/Documents/git_test_dir/mytest
+$ git commit -m "deleting fileToRemove.txt"                                          --> with this commit, the remote repository won't have the file anymore after pushing (see below)
+[master 1b709ae] deleting fileToRemove.txt
+ 1 file changed, 1 deletion(-)
+ delete mode 100644 fileToRemove.txt
+labcalcolo@labcalcolo-VirtualBox:~/Documents/git_test_dir/mytest
+$ git status
+On branch master
+nothing to commit, working directory clean
+labcalcolo@labcalcolo-VirtualBox:~/Documents/git_test_dir/mytest
+$ git push origin master
+Username for 'https://github.com': cippy
+Password for 'https://cippy@github.com': 
+Counting objects: 3, done.
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (2/2), 229 bytes | 0 bytes/s, done.
+Total 2 (delta 1), reused 0 (delta 0)
+To https://github.com/cippy/mytest.git
+   04f13f4..1b709ae  master -> master
+------ End of exercise ------------------------
+
+============================================================
