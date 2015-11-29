@@ -143,3 +143,13 @@ To https://github.com/cippy/mytest.git
 ------ End of exercise ------------------------
 
 ============================================================
+
+GIT STATUS WITHOUT SHOWING UNTRACKED FILES
+
+When using 'git status' command, all files in current directory that are untracked will be shown as such (untracked files are those in your local directory which are not in the remote one (and haven't been added). To avoid this use:
+
+$ git status -uno
+
+option '-u' shows all untracked files, while adding 'no' to it avoid this.
+
+======================================================================= 
