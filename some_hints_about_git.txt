@@ -1,0 +1,11 @@
+When I have a git repository with subdirectories, I can use:
+
+$ git add <file_name>
+$ git commit -m "message"
+
+from that directory.
+Then, after pushing (from the directory where .git is present) with:
+
+$ git push origin master
+
+I will find that my remote repository has the same filesystem as in my local, that is, a file committed in a directory called "dir" will be found in a directory with the same name in my remote repository.
