@@ -1,2 +1,3 @@
 file1 in mytest
 add line from fixbranch, then will merge to master
+add line from new branch named newbranch
