@@ -1,1 +1,2 @@
 file1 in mytest
+add line from new branch named newbranch
